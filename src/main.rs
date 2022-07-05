@@ -36,6 +36,9 @@ fn list_all(s: &State<Messages>) -> Template {
 fn submit(s: &State<Messages>, data: Json<DiunData<'_>>) -> Result<(), ()> {
     let mut msgs = s.messages.lock().unwrap();
     msgs.push(format!("[{}] Image {} needs updating on {}", Local::now(), data.image, data.hostname));
+    while msgs.len() > 100 {
+        msgs.remove(0);
+    }
     Ok(())
 }
 
